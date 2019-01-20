@@ -1,0 +1,8 @@
+(library
+  (name src)
+  (wrapped false)
+  (libraries
+    lwt
+    cohttp
+    cohttp-lwt
+    cohttp-lwt-unix))

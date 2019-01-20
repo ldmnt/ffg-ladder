@@ -1,3 +1,0 @@
-;; This declares the hello_world executable implemented by hello_world.ml
-(executable
- (name variation))

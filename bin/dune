@@ -1,0 +1,4 @@
+(executable
+  (name ffg_ladder)
+  (libraries
+    src))
