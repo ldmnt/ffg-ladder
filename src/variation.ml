@@ -6,7 +6,7 @@ let parameters rank =
     | [] -> failwith "Variance and dilatation parameters are empty."
     | [(_, con, a)] -> (con, a)
     | (level, con, a) :: t -> if level <= rank then (con, a) else process t in
-  process (List.rev Parameters_.parameters);;
+  process (List.rev Parameters_.parameters)
 
 
 let match_variation w_rank b_rank handicap result =
@@ -29,12 +29,12 @@ let match_variation w_rank b_rank handicap result =
     | Some Black -> Some (b_frank > w_frank)
     | Some White -> Some (w_frank > b_frank) in
   let (var_strong, var_weak) = variation strong weak strong_won in
-  if b_frank > w_frank then (var_weak, var_strong) else (var_strong, var_weak);;
+  if b_frank > w_frank then (var_weak, var_strong) else (var_strong, var_weak)
 
 
 let new_ranks w_rank b_rank handicap result =
   let (varw, varb) = match_variation w_rank b_rank handicap result in
-  (w_rank +. varw, b_rank +. varb);;
+  (w_rank +. varw, b_rank +. varb)
 
 
 let rec approx_new_rank initial_rank = function
@@ -44,7 +44,7 @@ let rec approx_new_rank initial_rank = function
        | None -> None
        | Some bool -> if bool then Some White else Some Black in
      let (new_rank, _) = new_ranks initial_rank opponent_rank 0. result in
-     approx_new_rank new_rank t;;
+     approx_new_rank new_rank t
 
 
-let approx_variation initial_rank matches = approx_new_rank initial_rank matches -. initial_rank;;
+let approx_variation initial_rank matches = approx_new_rank initial_rank matches -. initial_rank
