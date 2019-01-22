@@ -2,6 +2,8 @@
   (name src)
   (wrapped false)
   (libraries
+    base
+    stdio
     lwt
     cohttp
     cohttp-lwt
