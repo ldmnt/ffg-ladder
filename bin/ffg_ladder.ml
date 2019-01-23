@@ -1,6 +1,11 @@
-let initial_rank = 271. and matches = [(118., Some true); (142., Some true); (50., Some true); (257., Some true); (461., Some false)]
-let () = print_float (initial_rank +. Variation.approx_variation initial_rank matches); print_newline ()
+let player_name = "Tu Linh Vu"
+let matches =
+  [("Ougier Guillaume", Some true);
+   ("Frangi Manuel", Some true);
+   ("Minieri Davide", Some true);
+   ("Naegele Thibaud", Some true);
+   ("Neirynck Lucas", Some false)]
+let ladder = Ladder.get () |> Ladder.parse |> Lwt_main.run
 
-let _ = read_line ()
-    
-let () = Ladder.(get () |> print |> print_newline)
+let (initial_rank, new_rank) = Variation.tournament_results player_name matches ladder
+let () = print_float initial_rank; print_newline (); print_float new_rank; print_newline ()
