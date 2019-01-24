@@ -9,7 +9,7 @@ let parameters rank =
     | [(_, con, a)] -> (con, a)
     | (level, con, a) :: t -> if Float.(level <= rank) then (con, a) else process t in
   process (List.rev Parameters_.parameters)
-    
+
 let match_variation w_rank b_rank handicap result =
   let open Float in
   let w_frank = w_rank in
@@ -33,27 +33,29 @@ let match_variation w_rank b_rank handicap result =
   let (var_strong, var_weak) = variation strong weak strong_won in
   if b_frank > w_frank then (var_weak, var_strong) else (var_strong, var_weak)
                                                         
-let new_ranks_match w_rank b_rank handicap result =
+let new_ranks_one_match w_rank b_rank handicap result =
   let (varw, varb) = match_variation w_rank b_rank handicap result in
   (w_rank +. varw, b_rank +. varb)
-  
-let rec new_rank_matches initial_rank = function
-  | [] -> initial_rank
-  | (opponent_rank, result) :: t ->
-     let result = match result with
-       | None -> None
-       | Some bool -> if bool then Some White else Some Black in
-     let (rank, _) = new_ranks_match initial_rank opponent_rank 0. result in
-     new_rank_matches rank t
+
+(* Computes the variations and rank update after a series of matches. Restricted for now (because I was lazy) 
+   to only even games (therefore color does not matter and results are encoded as bool options). *)
+let new_rank_matches initial_rank results =
+  let rec loop initial_rank variations = function
+    | [] -> (initial_rank, List.rev variations)
+    | (opponent_rank, result) :: t ->
+       let result = match result with
+         | None -> None
+         | Some bool -> if bool then Some White else Some Black in
+       let (rank, _) = new_ranks_one_match initial_rank opponent_rank 0. result in
+       let var = rank -. initial_rank in
+       loop rank (var :: variations) t in
+  loop initial_rank [] results
                                             
 let tournament_results player_name results ladder =
   let get_rank name = match Map.find ladder name with
-    | Some (rank : float) -> rank
+    | Some rank -> rank
     | None -> raise (Failure ("Couldn't find rank of: " ^ name)) in
-  let initial_rank = get_rank player_name in
-  let new_rank =
-    results
-    |> List.map ~f:(fun (name, result) -> (get_rank name, result))
-    |> new_rank_matches initial_rank in
-  (initial_rank, new_rank)
-  
+  let (names, results) = List.unzip results in
+  let opponent_ranks = List.map ~f:get_rank names and initial_rank = get_rank player_name in
+  let (new_rank, variations) = new_rank_matches initial_rank (List.zip_exn opponent_ranks results) in
+  (initial_rank, new_rank, opponent_ranks, variations)
