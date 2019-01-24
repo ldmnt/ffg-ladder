@@ -1,7 +1,7 @@
 let player_name = "Tu Linh Vu"
 let matches =
   [("Ougier Guillaume", Some true);
-   ("Frangi Manuel", Some true);
+   ("Kunne Stéphan", Some true);
    ("Minieri Davide", Some true);
    ("Naegele Thibaud", Some true);
    ("Neirynck Lucas", Some false)]

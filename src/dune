@@ -7,4 +7,5 @@
     lwt
     cohttp
     cohttp-lwt
-    cohttp-lwt-unix))
+    cohttp-lwt-unix
+    uutf))

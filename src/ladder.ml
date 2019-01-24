@@ -2,9 +2,17 @@ open Base
 open Lwt
 open Cohttp_lwt_unix
 
+let latin1_to_utf8 str =
+  let rec loop dec buf = match Uutf.decode dec with
+    | `Uchar u -> Uutf.Buffer.add_utf_8 buf u; loop dec buf
+    | `End -> Buffer.contents buf
+    | `Malformed _ -> Uutf.Buffer.add_utf_8 buf Uutf.u_rep; loop dec buf
+    | `Await -> assert false in
+  loop (Uutf.decoder ~encoding:`ISO_8859_1 (`String str)) (Buffer.create 512)
+
 let get () =
   Client.get (Uri.of_string "http://ffg.jeudego.org/echelle/echtxt/ech_ffg_V3.txt") >>= fun (_, body) ->
-  Cohttp_lwt.Body.to_string body
+  Cohttp_lwt.Body.to_string body >|= latin1_to_utf8
 
 let print ladder =
   let ladder = Lwt_main.run ladder in
@@ -30,10 +38,10 @@ let parse_line line =
     List.rev (loop 0 0 [])
     |> List.map ~f:
       begin String.map ~f:
-          begin function
-            | '_' -> ' '
-            | c -> c
-          end
+        begin function
+          | '_' -> ' '
+          | c -> c
+        end
       end
     |> Array.of_list in
     (words.(0) ^ " " ^ words.(1), Float.of_string words.(2))
