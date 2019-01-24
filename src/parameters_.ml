@@ -1,6 +1,8 @@
+open Base
+
 let epsilon = 0.016
 let parameters = [
-    (neg_infinity, 116., 200.);
+    (Float.neg_infinity, 116., 200.);
     (-. 1850., 110., 195.);
     (-. 1750., 105., 190.);
     (-. 1650., 100., 185.);
@@ -28,3 +30,10 @@ let parameters = [
     (550., 11., 75.);
     (650., 10., 70.)
   ]
+
+let get rank =
+  let rec process = function
+    | [] -> failwith "Variance and dilatation parameters are empty."
+    | [(_, con, a)] -> (con, a)
+    | (level, con, a) :: t -> if Float.(level <= rank) then (con, a) else process t in
+  process (List.rev parameters)
