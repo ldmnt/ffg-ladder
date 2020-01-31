@@ -68,7 +68,7 @@ let new_rank_matches initial_rank results =
 
 
 let tournament_results player_name results ladder =
-  let get_rank name = match Map.find ladder name with
+  let get_rank name = match Trie.find ladder name with
     | Some rank -> rank
     | None -> raise (Failure ("Couldn't find rank of: " ^ name)) in
   let (names, results) = List.unzip results in

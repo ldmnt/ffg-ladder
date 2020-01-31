@@ -52,5 +52,8 @@ let parse ladder =
     | None -> assert false
     | Some l -> l end
   |> List.map ~f:parse_line
-  |> Map.of_alist_reduce (module String.Caseless) ~f:(fun x _ -> x)
+  |> Trie.of_alist
     
+let build () = get () |> parse
+
+let find = Trie.find_prefix

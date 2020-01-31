@@ -29,13 +29,35 @@ let results =
     | _ -> (s, Some false)
   end
 
-(* main *)
+(* Select players that have several matches in the ladder. *)
 let ladder = Lwt_main.run ladder
+
+let select_player name =
+  let (name, _) =
+    match Ladder.find ladder name ~limit:20 with
+    | [] -> raise (Failure ("Player not found: " ^ name))
+    | [e] -> e
+    | l ->
+      let options = List.mapi l ~f:(fun i (name, rank) ->
+          Printf.sprintf "%d. %s (%.0f)" i name rank) in
+      let index =
+        Stdio.printf "\nSelect player corresponding to name \"%s\":\n" name;
+        List.iter options ~f:Stdio.print_endline;
+        Caml.read_int () in
+      match List.nth l index with
+      | None -> raise (Failure ("Player not found: " ^ name))
+      | Some e -> e in
+  name
+
+let () = player_name := select_player !player_name
+let results = results |> List.map ~f:begin fun (name, result) -> (select_player name, result) end
+                
+(* Run simulation. *)
 let (initial_rank, new_rank, opponent_ranks, variations) = Variation.tournament_results !player_name results ladder
 
 (* print output *)
-let () = Stdio.printf "Initial rank for %s: %.0f\n" !player_name initial_rank
-let data = Option.(List.zip opponent_ranks variations >>= List.zip results)
+let () = Stdio.printf "\nInitial rank for %s: %.0f\n" !player_name initial_rank
+let data = List.zip_exn opponent_ranks variations |> List.zip_exn results
 let rec print_output i data =
   match data with
   | [] -> ()
@@ -47,7 +69,5 @@ let rec print_output i data =
     Stdio.printf "Match %d -- opponent: %s (%.0f) -- %s -- variation: %.2f\n"
       i name opp_rank result_str var;
     print_output (i + 1) t
-let () = match data with
-  | Some l -> print_output 0 l
-  | None -> assert false
+let () = print_output 0 data
 let () = Stdio.printf "New rank: %.0f -- global variation: %.2f\n" new_rank Float.(new_rank - initial_rank)
