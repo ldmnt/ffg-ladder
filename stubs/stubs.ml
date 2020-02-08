@@ -2,7 +2,7 @@ open Base
 open Js_of_ocaml
 
 
-let ladder : float Trie.t ref = ref Trie.empty
+let ladder : (string * float) Trie.t ref = ref Trie.empty
 
 let load_ladder ladder_str =
   ladder := ladder_str
@@ -10,8 +10,8 @@ let load_ladder ladder_str =
   |> Ladder.parse;
   Js.undefined
 
-let complete_name name =
-  Ladder.find !ladder (Js.to_string name) ~limit:10
+let complete_name name limit =
+  Ladder.find !ladder (Js.to_string name) ~limit:limit
   |> Array.of_list
   |> Array.map ~f:(fun (s, r) ->
       object%js

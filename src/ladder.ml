@@ -37,6 +37,9 @@ let parse ladder =
     | None -> assert false
     | Some l -> l end
   |> List.map ~f:parse_line
+  |> List.map ~f:(fun (name, rank) -> (name, (name, rank)))
   |> Trie.of_alist
 
-let find = Trie.find_prefix
+let find ladder name ~limit =
+  Trie.find_prefix ladder name ~limit
+  |> List.map ~f:(fun (_, data) -> data)
