@@ -1,19 +1,5 @@
 open Base
-open Lwt
-open Cohttp_lwt_unix
 
-(* to decode the ladder text file, which is latin-1 encoded. *)
-let latin1_to_utf8 str =
-  let rec loop dec buf = match Uutf.decode dec with
-    | `Uchar u -> Uutf.Buffer.add_utf_8 buf u; loop dec buf
-    | `End -> Buffer.contents buf
-    | `Malformed _ -> Uutf.Buffer.add_utf_8 buf Uutf.u_rep; loop dec buf
-    | `Await -> assert false in
-  loop (Uutf.decoder ~encoding:`ISO_8859_1 (`String str)) (Buffer.create 512)
-
-let get () =
-  Client.get (Uri.of_string "http://ffg.jeudego.org/echelle/echtxt/ech_ffg_V3.txt") >>= fun (_, body) ->
-  Cohttp_lwt.Body.to_string body >|= latin1_to_utf8
 
 (* helper function that extracts a tuple (last name + first name, rank) from one line of the ladder file *)
 let parse_line line =
@@ -44,7 +30,6 @@ let parse_line line =
     (words.(0) ^ " " ^ words.(1), Float.of_string words.(2))
 
 let parse ladder =
-  ladder >|= fun ladder ->
   ladder
   |> String.split_lines
   |> List.tl
@@ -53,7 +38,5 @@ let parse ladder =
     | Some l -> l end
   |> List.map ~f:parse_line
   |> Trie.of_alist
-    
-let build () = get () |> parse
 
 let find = Trie.find_prefix

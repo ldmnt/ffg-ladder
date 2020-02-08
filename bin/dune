@@ -1,4 +1,10 @@
 (executable
   (name ffg_ladder)
   (libraries
-    src))
+    src
+    base
+    lwt
+    cohttp
+    cohttp-lwt-unix
+    uutf
+    stdio))

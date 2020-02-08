@@ -1,6 +1,10 @@
 (* Very basic command line program to compute rank variations in the ffg ladder after a tournament *)
 
 open Base
+open Cohttp_lwt_unix
+
+let (>>=) = Lwt.(>>=)
+let (>|=) = Lwt.(>|=)
 
 let player_name = ref "" and opponents = ref "" and n = ref 0
 let usage_msg =
@@ -17,8 +21,22 @@ let parse_args s =
 
 let () = Caml.Arg.parse [] parse_args usage_msg
 
-(* Fetch ladder data *)
-let ladder = Ladder.get () |> Ladder.parse
+(* to decode the ladder text file, which is latin-1 encoded. *)
+let latin1_to_utf8 str =
+  let rec loop dec buf = match Uutf.decode dec with
+    | `Uchar u -> Uutf.Buffer.add_utf_8 buf u; loop dec buf
+    | `End -> Buffer.contents buf
+    | `Malformed _ -> Uutf.Buffer.add_utf_8 buf Uutf.u_rep; loop dec buf
+    | `Await -> assert false in
+  loop (Uutf.decoder ~encoding:`ISO_8859_1 (`String str)) (Buffer.create 512)
+
+(* fetch ladder data *)
+let ladder =
+  Client.get (Uri.of_string "http://ffg.jeudego.org/echelle/echtxt/ech_ffg_V3.txt") >>= fun (_, body) ->
+  Cohttp_lwt.Body.to_string body
+  >|= latin1_to_utf8
+  >|= Ladder.parse
+        
 let results =
   String.split ~on:',' !opponents
   |> List.map ~f:begin fun s ->

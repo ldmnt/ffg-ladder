@@ -2,10 +2,4 @@
   (name src)
   (wrapped false)
   (libraries
-    base
-    stdio
-    lwt
-    cohttp
-    cohttp-lwt
-    cohttp-lwt-unix
-    uutf))
+    base))
