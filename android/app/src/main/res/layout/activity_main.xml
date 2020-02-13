@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <Button
+        android:id="@+id/buttonCompute"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="simulate"
+        android:text="@string/button_compute"
+        app:layout_constraintBaseline_toBaselineOf="@+id/buttonClear"
+        app:layout_constraintEnd_toStartOf="@+id/buttonClear"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/buttonDownload"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:onClick="downloadLadder"
+        android:text="@string/button_download"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/textLadder"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <WebView
+        android:id="@+id/webView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="invisible"
+        tools:layout_editor_absoluteX="7dp"
+        tools:layout_editor_absoluteY="715dp" />
+
+    <AutoCompleteTextView
+        android:id="@+id/inputPlayer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="64dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="64dp"
+        android:dropDownHeight="wrap_content"
+        android:hint="@string/enter_player_self"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textLadder" />
+
+    <TextView
+        android:id="@+id/textLadder"
+        android:layout_width="170dp"
+        android:layout_height="44dp"
+        android:layout_marginTop="16dp"
+        android:gravity="center_vertical"
+        android:text="@string/text_no_ladder"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toStartOf="@+id/buttonDownload"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ListView
+        android:id="@+id/opponentsView"
+        android:layout_width="match_parent"
+        android:layout_height="352dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="44dp"
+        app:layout_constraintBottom_toTopOf="@+id/buttonCompute"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textPlayerSelf" />
+
+    <TextView
+        android:id="@+id/textPlayerSelf"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="32dp"
+        android:text="@string/no_player_selected"
+        app:layout_constraintBottom_toTopOf="@+id/opponentsView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inputPlayer"
+        app:layout_constraintVertical_bias="0.08" />
+
+    <Button
+        android:id="@+id/buttonClear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="64dp"
+        android:onClick="clearPlayers"
+        android:text="@string/text_clear"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/buttonCompute" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

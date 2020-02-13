@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">FFG ladder simulator</string>
+    <string name="button_compute">Simulate</string>
+    <string name="button_download">Download latest</string>
+    <string name="text_no_ladder">No ladder loaded</string>
+    <string name="no_player_selected">No player selected</string>
+    <string name="win">Win</string>
+    <string name="loss">Loss</string>
+    <string name="text_clear">Clear</string>
+    <string name="enter_player_self">Enter your name</string>
+    <string name="enter_opponent">Enter opponent name</string>
+    <string name="downloading">...</string>
+</resources>

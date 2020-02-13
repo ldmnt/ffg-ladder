@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:baselineAligned="false"
+    android:orientation="horizontal"
+    android:stretchColumns="1">
+    <TableRow>
+        <TextView
+            android:id="@+id/playerName"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:baselineAligned="false"
+            android:gravity="center_vertical" />
+
+        <RadioGroup
+            android:id="@+id/radioGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:baselineAligned="false"
+            android:checkedButton="@id/winButton"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/winButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="10dp"
+                android:paddingEnd="20dp"
+                android:text="@string/win" />
+
+            <RadioButton
+                android:id="@+id/lossButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/loss" />
+        </RadioGroup>
+    </TableRow>
+</TableLayout>
