@@ -8,15 +8,18 @@ let (>|=) = Lwt.(>|=)
 
 let player_name = ref "" and opponents = ref "" and n = ref 0
 let usage_msg =
-  "Usage: ffg_ladder \"player_name\" \"opponent_1[+|=|],opponent_2[+|=],...\"\n"
-  ^ "where + stands for a win, = for a draw, and nothing for a loss\n"
-  ^ "Example: ffg_ladder \"Dumont Louis\" \"Blanc Maurice+,Dupont Estelle,Fillet Chloé=,Marlet André+\""
+  "Usage: ffg_ladder \"player_name\" \"opponent_1[+|],opponent_2[+|],...\"\n"
+  ^ "where + stands for a win, and nothing for a loss.\n"
+  ^ "You may replace a name by a prefix, which will be searched in the ladder."
+  ^ "Example: ffg_ladder \"Dumont\" \"Blanc Mau+,Dupont Estelle,Fill,Marlet+\""
+
+let () = if Array.length (Sys.get_argv ()) - 1 <> 2 then (Caml.Arg.usage [] usage_msg; Caml.exit 0)
 
 let parse_args s =
   let () = match !n with
   | 0 -> player_name := s
   | 1 -> opponents := s
-  | _ -> Caml.Arg.usage [] usage_msg in
+  | _ -> assert false in
   n := !n + 1
 
 let () = Caml.Arg.parse [] parse_args usage_msg
